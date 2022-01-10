@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- task: Synapse workspace deployment@1
+  inputs:
+    TemplateFile: 'bamboox-synapse/TemplateForWorkspace.json'
+    ParametersFile: 'bamboox-synapse/TemplateParametersForWorkspace.json'
+    azureSubscription: 'bamboox-beta (2a24ae5f-0dab-46e6-8f9d-6a2018623814)'
+    ResourceGroupName: 'bamboox-adf'
+    TargetWorkspaceName: 'bamboox-synapse'
+    DeleteArtifactsNotInTemplate: false
+    Environment: 'prod'
