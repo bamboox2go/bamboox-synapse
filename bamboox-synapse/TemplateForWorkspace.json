@@ -21,15 +21,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/bambooxdefault')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/bamboox-synapse-WorkspaceDefaultSqlServer')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -128,7 +119,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "0201ef50-8781-4b40-aadb-9224c9d93f3b"
+						"spark.autotune.trackingId": "a1bb5f7a-3ed1-4a87-ae21-fdc3932d55de"
 					}
 				},
 				"metadata": {
@@ -153,15 +144,12 @@
 						"sparkVersion": "3.1",
 						"nodeCount": 3,
 						"cores": 4,
-						"memory": 28,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
+						"memory": 28
+					}
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"print(\"Hello world v0.01!\")"
 						],
