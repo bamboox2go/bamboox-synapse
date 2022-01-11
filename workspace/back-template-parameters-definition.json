@@ -1,9 +1,18 @@
 {
-  "Microsoft.Synapse/workspaces/notebooks": {
-          "properties":{
-              "bigDataPool":{
-                  "referenceName": "="
+    "Microsoft.Synapse/workspaces/notebooks": {
+            "properties":{
+                "bigDataPool":{
+                    "referenceName": "="
+                }
+            }
+      },
+      "Microsoft.Synapse/workspaces/linkedServices": {
+          "*": {
+              "properties": {
+                  "typeProperties": {
+                       "*": "="
+                  }
               }
           }
       }
-}
+  }
