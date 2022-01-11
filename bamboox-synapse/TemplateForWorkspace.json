@@ -11,24 +11,15 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'bamboox-synapse-WorkspaceDefaultSqlServer'"
 		},
-		"BasicNotebook_properties_bigDataPool_referenceName": {
+		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "bambooxdefault"
+			"defaultValue": "https://bambooxlake.dfs.core.windows.net"
 		}
 	},
 	"variables": {
 		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('workspaceName'), '/bambooxdefault')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/bamboox-synapse-WorkspaceDefaultSqlServer')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
@@ -42,10 +33,7 @@
 				"annotations": [],
 				"type": "AzureSqlDW",
 				"typeProperties": {
-					"connectionString": {
-						"type": "SecureString",
-						"value": "[parameters('bamboox-synapse-WorkspaceDefaultSqlServer_connectionString')]"
-					}
+					"connectionString": "[parameters('bamboox-synapse-WorkspaceDefaultSqlServer_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -64,7 +52,7 @@
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
-					"url": "https://bambooxlake.dfs.core.windows.net"
+					"url": "[parameters('bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -118,7 +106,7 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "[parameters('BasicNotebook_properties_bigDataPool_referenceName')]",
+					"referenceName": "bambooxdefault",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
@@ -131,7 +119,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "2f2d7ed7-924a-42c5-8b14-1ddbefb6c42a"
+						"spark.autotune.trackingId": "31d768f7-ce3c-406e-a710-a2268b3442b9"
 					}
 				},
 				"metadata": {
@@ -226,6 +214,15 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/bambooxdefault')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": []
+			},
+			"dependsOn": []
 		}
 	]
 }

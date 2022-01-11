@@ -8,8 +8,8 @@
 		"bamboox-synapse-WorkspaceDefaultSqlServer_connectionString": {
 			"value": ""
 		},
-		"BasicNotebook_properties_bigDataPool_referenceName": {
-			"value": "bambooxdefault"
+		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://bambooxlake.dfs.core.windows.net"
 		}
 	}
 }
