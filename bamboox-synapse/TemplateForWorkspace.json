@@ -18,11 +18,11 @@
 			"type": "string",
 			"defaultValue": "https://bambooxlake.dfs.core.windows.net"
 		},
-		"BasicNotebook_properties_bigDataPool_referenceName": {
+		"BasicNotebook_properties_bigDataPool_sparkpool": {
 			"type": "string",
 			"defaultValue": "bambooxdefault"
 		},
-		"SecondNotebook_properties_bigDataPool_referenceName": {
+		"SecondNotebook_properties_bigDataPool_sparkpool": {
 			"type": "string",
 			"defaultValue": "bambooxdefault"
 		}
@@ -129,7 +129,7 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "[parameters('BasicNotebook_properties_bigDataPool_referenceName')]",
+					"referenceName": "[parameters('BasicNotebook_properties_bigDataPool_sparkpool')]",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
@@ -191,7 +191,7 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "[parameters('SecondNotebook_properties_bigDataPool_referenceName')]",
+					"referenceName": "[parameters('SecondNotebook_properties_bigDataPool_sparkpool')]",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
@@ -204,7 +204,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "882d9083-92ee-43f2-86f0-9af31a7a873d"
+						"spark.autotune.trackingId": "156ec390-bd03-4645-a0f1-aa180a8428ef"
 					}
 				},
 				"metadata": {

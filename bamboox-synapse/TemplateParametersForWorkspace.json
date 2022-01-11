@@ -14,10 +14,10 @@
 		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://bambooxlake.dfs.core.windows.net"
 		},
-		"BasicNotebook_properties_bigDataPool_referenceName": {
+		"BasicNotebook_properties_bigDataPool_sparkpool": {
 			"value": "bambooxdefault"
 		},
-		"SecondNotebook_properties_bigDataPool_referenceName": {
+		"SecondNotebook_properties_bigDataPool_sparkpool": {
 			"value": "bambooxdefault"
 		}
 	}
