@@ -3,6 +3,15 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+parameters:
+  - name: synapse
+    displayName: Synapse instance
+    type: string
+    default: 'bamboox-synapse'
+    values:
+      - 'bamboox-synapse'
+      - 'retro-synapse'
+
 trigger:
 - main
 
@@ -19,6 +28,7 @@ steps:
     ParametersFile: 'bamboox-synapse/TemplateParametersForWorkspace.json'
     azureSubscription: 'bamboox-beta (2a24ae5f-0dab-46e6-8f9d-6a2018623814)'
     ResourceGroupName: 'bamboox-adf'
-    TargetWorkspaceName: 'bamboox-synapse'
+    TargetWorkspaceName: ${{ parameters.synapse }}
     DeleteArtifactsNotInTemplate: false
+    OverrideArmParameters: -workspaceName ${{ parameters.synapse }}
     Environment: 'prod'
