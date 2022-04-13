@@ -19,6 +19,12 @@
 		},
 		"SecondNotebook_properties_bigDataPool_sparkpool": {
 			"value": "bambooxdefault"
+		},
+		"BambooxStorege_properties_typeProperties_serviceEndpoint": {
+			"value": "https://qzstorageaccountstg.blob.core.windows.net"
+		},
+		"BambooxStorege_properties_typeProperties_accountKind": {
+			"value": "StorageV2"
 		}
 	}
 }

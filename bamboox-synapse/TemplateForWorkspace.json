@@ -25,21 +25,20 @@
 		"SecondNotebook_properties_bigDataPool_sparkpool": {
 			"type": "string",
 			"defaultValue": "bambooxdefault"
+		},
+		"BambooxStorege_properties_typeProperties_serviceEndpoint": {
+			"type": "string",
+			"defaultValue": "https://qzstorageaccountstg.blob.core.windows.net"
+		},
+		"BambooxStorege_properties_typeProperties_accountKind": {
+			"type": "string",
+			"defaultValue": "StorageV2"
 		}
 	},
 	"variables": {
 		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('workspaceName'), '/bambooxdefault')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/bamboox-synapse-WorkspaceDefaultSqlServer')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
@@ -122,6 +121,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/read-data')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://bambooxlake.dfs.core.windows.net/lake/tmp/delta/probate/',\n        FORMAT = 'DELTA'\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/BasicNotebook')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -142,7 +161,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "a1bb5f7a-3ed1-4a87-ae21-fdc3932d55de"
+						"spark.autotune.trackingId": "1d0457a5-adb6-428c-aba7-61158b03e0b7"
 					}
 				},
 				"metadata": {
@@ -150,7 +169,7 @@
 					"enableDebugMode": false,
 					"kernelspec": {
 						"name": "synapse_pyspark",
-						"display_name": "python"
+						"display_name": "Synapse PySpark"
 					},
 					"language_info": {
 						"name": "python"
@@ -168,16 +187,69 @@
 						"nodeCount": 3,
 						"cores": 4,
 						"memory": 28
-					}
+					},
+					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
 						"source": [
-							"print(\"Hello world v0.01!\")"
+							"file=\"befta-master-ft-crud-3-2021-11.jsonl\"\n",
+							"container=\"source\"\n",
+							"storage=\"qzstorageaccountstg\""
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"# linked_service_name = 'LS_mi_persistent_storage' # replace with your linked service name\n",
+							"# spark.conf.set(\"spark.storage.synapse.linkedServiceName\", linked_service_name)\n",
+							"# spark.conf.set(\"fs.azure.account.oauth.provider.type\", \"com.microsoft.azure.synapse.tokenlibrary.LinkedServiceBasedTokenProvider\") \n",
+							"\n",
+							"abspath = 'abfss://{container}@{storage}.dfs.core.windows.net/{file}'.format(container=container, storage=storage,file=file)\n",
+							"df = spark.read.load(abspath, format='json')\n",
+							"\n",
+							"df.createOrReplaceTempView('temptable')\n",
+							"test = spark.sql(\"\"\"select * from temptable\"\"\")\n",
+							"# display(df.limit(10))"
+						],
+						"outputs": [],
+						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"test.write \\\n",
+							"  .format(\"delta\") \\\n",
+							"  .mode(\"append\") \\\n",
+							"  .save(\"/tmp/delta/probate\")"
+						],
+						"outputs": [],
+						"execution_count": 3
 					}
 				]
 			},
@@ -204,7 +276,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "156ec390-bd03-4645-a0f1-aa180a8428ef"
+						"spark.autotune.trackingId": "67b12907-5228-4b93-845b-3474ceff7746"
 					}
 				},
 				"metadata": {
@@ -229,15 +301,13 @@
 						"sparkVersion": "3.1",
 						"nodeCount": 3,
 						"cores": 4,
-						"memory": 28,
-						"automaticScaleJobs": false
+						"memory": 28
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"print(\"Hello world v0.01!\")"
 						],
@@ -247,6 +317,31 @@
 				]
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/bambooxdefault')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 5
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 3,
+					"minNodeCount": 3
+				},
+				"nodeCount": 0,
+				"nodeSize": "Small",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "3.1",
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": true,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "uksouth"
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/default')]",
@@ -298,6 +393,26 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/BambooxStorege')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"serviceEndpoint": "[parameters('BambooxStorege_properties_typeProperties_serviceEndpoint')]",
+					"accountKind": "[parameters('BambooxStorege_properties_typeProperties_accountKind')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		}
 	]
