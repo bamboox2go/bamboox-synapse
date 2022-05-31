@@ -6,6 +6,12 @@
 trigger:
 - main
 
+resources:
+  pipelines:
+  - pipeline: devops-pipeline  
+    source: bamboox2go.devops-pipeline  
+    trigger: true    
+
 pool:
   vmImage: ubuntu-latest
 
