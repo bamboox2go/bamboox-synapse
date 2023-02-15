@@ -1,5 +1,5 @@
 {
-	"name": "bamboox-synapse-dev-WorkspaceDefaultStorage",
+	"name": "bamboox-synapse-WorkspaceDefaultStorage",
 	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"typeProperties": {
