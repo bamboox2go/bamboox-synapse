@@ -3,7 +3,7 @@
 	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"typeProperties": {
-			"url": "https://bambooxlake-dev.dfs.core.windows.net"
+			"url": "https://bambooxlake.dfs.core.windows.net"
 		},
 		"type": "AzureBlobFS",
 		"connectVia": {
