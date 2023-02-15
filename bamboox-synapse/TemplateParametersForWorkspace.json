@@ -12,7 +12,7 @@
 			"value": "https://qzstorageaccountstg.blob.core.windows.net"
 		},
 		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
-			"value": "https://bambooxlake-dev.dfs.core.windows.net"
+			"value": "https://bambooxlake.dfs.core.windows.net"
 		}
 	}
 }

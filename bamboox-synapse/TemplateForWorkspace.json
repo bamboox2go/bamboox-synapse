@@ -18,7 +18,7 @@
 		},
 		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://bambooxlake-dev.dfs.core.windows.net"
+			"defaultValue": "https://bambooxlake.dfs.core.windows.net"
 		}
 	},
 	"variables": {
