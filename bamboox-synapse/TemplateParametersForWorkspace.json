@@ -6,25 +6,13 @@
 			"value": "bamboox-synapse"
 		},
 		"bamboox-synapse-WorkspaceDefaultSqlServer_connectionString": {
-			"value": ""
-		},
-		"bamboox-synapse-WorkspaceDefaultSqlServer_properties_typeProperties_connectionString": {
-			"value": ""
-		},
-		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
-			"value": "https://bambooxlake.dfs.core.windows.net"
-		},
-		"BasicNotebook_properties_bigDataPool_sparkpool": {
-			"value": "bambooxdefault"
-		},
-		"SecondNotebook_properties_bigDataPool_sparkpool": {
-			"value": "bambooxdefault"
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:bamboox-synapse.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
 		"BambooxStorege_properties_typeProperties_serviceEndpoint": {
 			"value": "https://qzstorageaccountstg.blob.core.windows.net"
 		},
-		"BambooxStorege_properties_typeProperties_accountKind": {
-			"value": "StorageV2"
+		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://bambooxlake.dfs.core.windows.net"
 		}
 	}
 }

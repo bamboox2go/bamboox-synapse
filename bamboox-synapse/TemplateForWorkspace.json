@@ -9,36 +9,104 @@
 		},
 		"bamboox-synapse-WorkspaceDefaultSqlServer_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'bamboox-synapse-WorkspaceDefaultSqlServer'"
-		},
-		"bamboox-synapse-WorkspaceDefaultSqlServer_properties_typeProperties_connectionString": {
-			"type": "string"
-		},
-		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://bambooxlake.dfs.core.windows.net"
-		},
-		"BasicNotebook_properties_bigDataPool_sparkpool": {
-			"type": "string",
-			"defaultValue": "bambooxdefault"
-		},
-		"SecondNotebook_properties_bigDataPool_sparkpool": {
-			"type": "string",
-			"defaultValue": "bambooxdefault"
+			"metadata": "Secure string for 'connectionString' of 'bamboox-synapse-WorkspaceDefaultSqlServer'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:bamboox-synapse.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
 		"BambooxStorege_properties_typeProperties_serviceEndpoint": {
 			"type": "string",
 			"defaultValue": "https://qzstorageaccountstg.blob.core.windows.net"
 		},
-		"BambooxStorege_properties_typeProperties_accountKind": {
+		"bamboox-synapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "StorageV2"
+			"defaultValue": "https://bambooxlake.dfs.core.windows.net"
 		}
 	},
 	"variables": {
 		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/Sample Pipeline')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Fail1",
+						"type": "Fail",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"message": "Error",
+							"errorCode": "404"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"c": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-05-08T23:15:36Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Smaple2')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var1",
+							"value": "\"va\""
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"var1": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-05-08T23:22:29Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/BambooxStorege')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"serviceEndpoint": "[parameters('BambooxStorege_properties_typeProperties_serviceEndpoint')]",
+					"accountKind": "StorageV2"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/bamboox-synapse-WorkspaceDefaultSqlServer')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
@@ -52,10 +120,7 @@
 				"annotations": [],
 				"type": "AzureSqlDW",
 				"typeProperties": {
-					"connectionString": {
-						"type": "SecureString",
-						"value": "[parameters('bamboox-synapse-WorkspaceDefaultSqlServer_properties_typeProperties_connectionString')]"
-					}
+					"connectionString": "[parameters('bamboox-synapse-WorkspaceDefaultSqlServer_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -121,6 +186,66 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Create pool')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- Create DB \nDECLARE @DataBaseName nvarchar(128) = 'bamboox_serverless_db'\n\nIF NOT EXISTS ( select name FROM  master.sys.databases  WHERE name = @DataBaseName)\n    EXEC('CREATE DATABASE '+ @DataBaseName + ' COLLATE Latin1_General_100_BIN2_UTF8')\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Create schema and view')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- CREATE SCHEMA bamboox AUTHORIZATION [dbo]\n-- create view  [bamboox].[probate] as \n--             SELECT * FROM\n--             OPENROWSET(\n--                 BULK '/',\n--                 DATA_SOURCE = 'probatesource',\n--                 FORMAT = 'DELTA',\n--             ) AS [result]\n\ncreate view  [bamboox].[probate] as \nSELECT * FROM\nOPENROWSET(\n    BULK '/',\n    DATA_SOURCE = 'probatesource',\n    FORMAT = 'DELTA'\n)  AS [file]\n\n\nGRANT SELECT ON SCHEMA::[bamboox] TO [yangmei4@hotmail.com]\nGO\n\nGRANT REFERENCES ON DATABASE SCOPED CREDENTIAL::WorkspaceIdentity TO [yangmei4@hotmail.com]\n\nGRANT ADMINISTER DATABASE BULK OPERATIONS TO [yangmei4@hotmail.com]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "bamboox_serverless_db",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Manage identity credentials')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity\nWITH IDENTITY = 'Managed Identity';\nGO\n\nSELECT * FROM [bamboox].[probate]\n\n\n\nCREATE EXTERNAL DATA SOURCE permission_test WITH (\n    LOCATION = 'https://bambooxlake.blob.core.windows.net/lake/tmp/delta/probate/',\n    CREDENTIAL = WorkspaceIdentity\n);",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "bamboox_serverless_db",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/read-data')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -148,7 +273,7 @@
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "[parameters('BasicNotebook_properties_bigDataPool_sparkpool')]",
+					"referenceName": "bambooxdefault",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
@@ -157,6 +282,7 @@
 					"executorMemory": "28g",
 					"executorCores": 4,
 					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
@@ -181,12 +307,14 @@
 						"endpoint": "https://bamboox-synapse.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/bambooxdefault",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
+							"authResource": "https://dev.azuresynapse.net",
+							"authHeader": null
 						},
 						"sparkVersion": "3.1",
 						"nodeCount": 3,
 						"cores": 4,
-						"memory": 28
+						"memory": 28,
+						"extraHeader": null
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -256,14 +384,14 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SecondNotebook')]",
+			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"nbformat": 4,
 				"nbformat_minor": 2,
 				"bigDataPool": {
-					"referenceName": "[parameters('SecondNotebook_properties_bigDataPool_sparkpool')]",
+					"referenceName": "bambooxdefault",
 					"type": "BigDataPoolReference"
 				},
 				"sessionProperties": {
@@ -272,15 +400,88 @@
 					"executorMemory": "28g",
 					"executorCores": 4,
 					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "67b12907-5228-4b93-845b-3474ceff7746"
+						"spark.autotune.trackingId": "53d4b5ba-ca30-4f2e-b43a-14d0c5f99ee9"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
+					"synapse_widget": {
+						"version": "0.1"
+					},
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/2a24ae5f-0dab-46e6-8f9d-6a2018623814/resourceGroups/bamboox-adf/providers/Microsoft.Synapse/workspaces/bamboox-synapse/bigDataPools/bambooxdefault",
+						"name": "bambooxdefault",
+						"type": "Spark",
+						"endpoint": "https://bamboox-synapse.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/bambooxdefault",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net",
+							"authHeader": null
+						},
+						"sparkVersion": "3.1",
+						"nodeCount": 3,
+						"cores": 4,
+						"memory": 28,
+						"extraHeader": null
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"pip freeze"
+						],
+						"outputs": [],
+						"execution_count": 2
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SecondNotebook')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "bambooxdefault",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "18f2488f-e34f-46c6-9ad6-02b4535ff7b7"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"synapse_widget": {
+						"version": "0.1"
+					},
 					"enableDebugMode": false,
 					"kernelspec": {
 						"name": "synapse_pyspark",
@@ -296,12 +497,14 @@
 						"endpoint": "https://bamboox-synapse.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/bambooxdefault",
 						"auth": {
 							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
+							"authResource": "https://dev.azuresynapse.net",
+							"authHeader": null
 						},
 						"sparkVersion": "3.1",
 						"nodeCount": 3,
 						"cores": 4,
-						"memory": 28
+						"memory": 28,
+						"extraHeader": null
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -309,10 +512,9 @@
 					{
 						"cell_type": "code",
 						"source": [
-							"print(\"Hello world v0.01!\")"
+							"print(\"Hello world v0.011!\")"
 						],
-						"outputs": [],
-						"execution_count": null
+						"outputs": []
 					}
 				]
 			},
@@ -336,8 +538,43 @@
 				"nodeSize": "Small",
 				"nodeSizeFamily": "MemoryOptimized",
 				"sparkVersion": "3.1",
+				"libraryRequirements": {
+					"content": "great-expectations==0.15.21",
+					"filename": "requirements.txt",
+					"time": "2022-09-06T14:39:17.0250064Z"
+				},
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "uksouth"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/banbooxold')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 15
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 3,
+					"minNodeCount": 3
+				},
+				"nodeCount": 0,
+				"nodeSize": "Small",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "2.4",
+				"libraryRequirements": {
+					"content": "great-expectations==0.14.7\n",
+					"filename": "requirements.txt",
+					"time": "2022-10-17T14:22:33.6681731Z"
+				},
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": false,
 				"annotations": []
 			},
 			"dependsOn": [],
@@ -393,26 +630,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/BambooxStorege')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"serviceEndpoint": "[parameters('BambooxStorege_properties_typeProperties_serviceEndpoint')]",
-					"accountKind": "[parameters('BambooxStorege_properties_typeProperties_accountKind')]"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		}
 	]
