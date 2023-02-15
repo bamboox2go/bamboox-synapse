@@ -1,0 +1,10 @@
+{
+	"name": "synapse-ws-sqlOnDemand--bamboox-synapse",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/2a24ae5f-0dab-46e6-8f9d-6a2018623814/resourceGroups/bamboox-adf/providers/Microsoft.Synapse/workspaces/bamboox-synapse",
+		"groupId": "sqlOnDemand",
+		"fqdns": [
+			"bamboox-synapse-ondemand.e358958c-ce50-4cca-b978-681e361bf2f7.sql.azuresynapse.net"
+		]
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Create pool",
+	"properties": {
+		"content": {
+			"query": "-- Create DB \nDECLARE @DataBaseName nvarchar(128) = 'bamboox_serverless_db'\n\nIF NOT EXISTS ( select name FROM  master.sys.databases  WHERE name = @DataBaseName)\n    EXEC('CREATE DATABASE '+ @DataBaseName + ' COLLATE Latin1_General_100_BIN2_UTF8')\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

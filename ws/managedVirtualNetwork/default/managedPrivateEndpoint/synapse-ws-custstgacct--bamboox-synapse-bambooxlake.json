@@ -1,0 +1,10 @@
+{
+	"name": "synapse-ws-custstgacct--bamboox-synapse-bambooxlake",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/2a24ae5f-0dab-46e6-8f9d-6a2018623814/resourceGroups/bamboox-adf/providers/Microsoft.Storage/storageAccounts/bambooxlake",
+		"groupId": "dfs",
+		"fqdns": [
+			"bambooxlake.dfs.core.windows.net"
+		]
+	}
+}

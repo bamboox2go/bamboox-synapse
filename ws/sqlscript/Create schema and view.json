@@ -1,0 +1,17 @@
+{
+	"name": "Create schema and view",
+	"properties": {
+		"content": {
+			"query": "-- CREATE SCHEMA bamboox AUTHORIZATION [dbo]\n-- create view  [bamboox].[probate] as \n--             SELECT * FROM\n--             OPENROWSET(\n--                 BULK '/',\n--                 DATA_SOURCE = 'probatesource',\n--                 FORMAT = 'DELTA',\n--             ) AS [result]\n\ncreate view  [bamboox].[probate] as \nSELECT * FROM\nOPENROWSET(\n    BULK '/',\n    DATA_SOURCE = 'probatesource',\n    FORMAT = 'DELTA'\n)  AS [file]\n\n\nGRANT SELECT ON SCHEMA::[bamboox] TO [yangmei4@hotmail.com]\nGO\n\nGRANT REFERENCES ON DATABASE SCOPED CREDENTIAL::WorkspaceIdentity TO [yangmei4@hotmail.com]\n\nGRANT ADMINISTER DATABASE BULK OPERATIONS TO [yangmei4@hotmail.com]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "bamboox_serverless_db",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

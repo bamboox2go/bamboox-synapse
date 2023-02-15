@@ -1,0 +1,25 @@
+{
+	"name": "Smaple2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var1",
+					"value": "\"va\""
+				}
+			}
+		],
+		"variables": {
+			"var1": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-05-08T23:22:29Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

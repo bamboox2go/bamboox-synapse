@@ -1,0 +1,25 @@
+{
+	"name": "Sample Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "Error",
+					"errorCode": "404"
+				}
+			}
+		],
+		"variables": {
+			"c": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-05-08T23:15:36Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
