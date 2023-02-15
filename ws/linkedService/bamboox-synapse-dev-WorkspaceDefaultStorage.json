@@ -1,9 +1,9 @@
 {
-	"name": "bamboox-synapse-WorkspaceDefaultStorage",
+	"name": "bamboox-synapse-dev-WorkspaceDefaultStorage",
 	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"typeProperties": {
-			"url": "https://bambooxlake.dfs.core.windows.net"
+			"url": "https://bambooxlake-dev.dfs.core.windows.net"
 		},
 		"type": "AzureBlobFS",
 		"connectVia": {
