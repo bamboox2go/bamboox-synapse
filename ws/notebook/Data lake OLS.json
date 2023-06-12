@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "d3bb649f-c6c7-4fe3-93eb-93badd47a86e"
+				"spark.autotune.trackingId": "618e17f3-d4d2-473f-a4bb-d9e1cdcd3971"
 			}
 		},
 		"metadata": {
@@ -128,10 +128,28 @@
 					}
 				},
 				"source": [
-					"\n",
-					"write_df.write.format(\"delta\").mode(\"append\").saveAsTable(\"temporal_db.obs_table\")"
+					"spark.sql(\"CREATE DATABASE IF NOT EXISTS lake_db COMMENT 'This is the lake database' LOCATION '/lake_db'\")"
 				],
-				"execution_count": 8
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"\n",
+					"write_df.write.format(\"delta\").mode(\"append\").saveAsTable(\"lake_db.obs_table\")"
+				],
+				"execution_count": 10
 			}
 		]
 	}
