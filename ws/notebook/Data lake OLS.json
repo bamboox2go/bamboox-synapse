@@ -1,0 +1,44 @@
+{
+	"name": "Data lake OLS",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "c1cf3964-1727-4670-88f5-8fea33a28f33"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "python"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"# file_http_path =  https://bambooxlake.blob.core.windows.net/lake/tmp/delta/probate/part-00000-046c5d66-cbb9-466a-a368-d9fc8bd9a4d6-c000.snappy.parquet\n",
+					"filePath = \"abfss://lake@bambooxlake.dfs.core.windows.net/tmp/delta/probate/part-00000-046c5d66-cbb9-466a-a368-d9fc8bd9a4d6-c000.snappy.parquet\"\n",
+					"df = spark.read.format(\"parquet\").load(filePath)\n",
+					""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
