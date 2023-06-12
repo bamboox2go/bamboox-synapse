@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 2",
+	"properties": {
+		"content": {
+			"query": "GRANT CONNECT ANY DATABASE to [MI SDP ACLs SBOX E B6887F9CC149218421F72F596FC4D274C03A18201FA6AF8570B4F38C2BFED12C];",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
