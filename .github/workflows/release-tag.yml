@@ -1,6 +1,9 @@
 name: move tags
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  check_run:
+    types: [completed]
 
 jobs:
   tags:
