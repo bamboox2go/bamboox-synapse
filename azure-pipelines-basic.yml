@@ -13,7 +13,6 @@ parameters:
     values:
       - 'false'
       - 'true'
-      -
 pool:
   vmImage: ubuntu-latest
 
