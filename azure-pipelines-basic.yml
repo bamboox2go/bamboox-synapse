@@ -5,9 +5,23 @@
 
 trigger: none
 
+parameters:
+  - name: error
+    displayName: Fail Pipeline
+    type: string
+    default: 'false'
+    values:
+      - 'false'
+      - 'true'
+      -
 pool:
   vmImage: ubuntu-latest
 
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+
+- bash: |
+    exit 1
+  displayName: Fail build if partially successful
+  condition: eq('${{ parameters.name }}', 'true')
