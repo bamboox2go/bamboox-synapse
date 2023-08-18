@@ -1,0 +1,18 @@
+name: move tags
+
+on:
+  release:
+    types:
+      - "created"
+
+jobs:
+  tags:
+    runs-on: ubuntu-latest
+    steps:
+      # You have to check out your repo first.
+      - uses: actions/checkout@v2
+      - uses: fischerscode/tagger@v0.2
+        with:
+          # The prefix of the semantic tags.
+          # Default: ''
+          prefix: v
