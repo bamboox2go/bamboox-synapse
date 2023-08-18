@@ -6,7 +6,7 @@ on:
     types: [completed]
     app:
       name: [Azure Pipelines]
-
+    conclusion: [success]
 
 jobs:
   tags:
