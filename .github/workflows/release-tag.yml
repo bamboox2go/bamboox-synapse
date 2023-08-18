@@ -21,7 +21,7 @@ jobs:
         id: wait-for-build
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: "Azure Pipelines / bamboox2go.bamboox-synapse (1)"
+          checkName: "bamboox2go.bamboox-synapse (1)"
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Do something with a passing build
         if: steps.wait-for-build.outputs.conclusion == 'success'
