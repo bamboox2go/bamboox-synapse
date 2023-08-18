@@ -1,9 +1,6 @@
 name: move tags
 
-on:
-  release:
-    types:
-      - "created"
+on: workflow_dispatch
 
 jobs:
   tags:
