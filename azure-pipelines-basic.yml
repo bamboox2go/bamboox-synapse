@@ -23,4 +23,4 @@ steps:
 - bash: |
     exit 1
   displayName: Fail build if partially successful
-  condition: eq('${{ parameters.name }}', 'true')
+  condition: eq('${{ parameters.error }}', 'true')
