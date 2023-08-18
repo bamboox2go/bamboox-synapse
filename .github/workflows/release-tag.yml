@@ -19,6 +19,12 @@ jobs:
       #        uses: mathieudutour/github-tag-action@v6.0
       #        with:
       #          github_token: ${{ secrets.GITHUB_TOKEN }}
+#      github.event
+      - name: log-info
+        run: |
+          echo "build success"
+        env:
+          NUMBER: ${{ toJSON(github.event) }}
       - name: Wait for build to succeed
         uses: fountainhead/action-wait-for-check@v1.1.0
         id: wait-for-build
