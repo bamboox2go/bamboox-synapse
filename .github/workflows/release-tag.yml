@@ -3,11 +3,11 @@ name: move tags
 on:
   workflow_dispatch:
   status:
-#  check_run:
-#    types: [completed]
-#    app:
-#      name: [Azure Pipelines]
-#    conclusion: [success]
+  check_run:
+    types: [completed]
+    app:
+      name: [Azure Pipelines]
+    conclusion: [success]
 
 jobs:
   tags:
@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "build success"
         env:
-          NUMBER: ${{ toJSON(github.event) }}
+          GIT_CONTEXT: ${{ toJSON(github) }}
       - name: Wait for build to succeed
         uses: fountainhead/action-wait-for-check@v1.1.0
         id: wait-for-build
