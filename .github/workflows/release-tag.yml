@@ -2,11 +2,12 @@ name: move tags
 
 on:
   workflow_dispatch:
-  check_run:
-    types: [completed]
-    app:
-      name: [Azure Pipelines]
-    conclusion: [success]
+  status:
+#  check_run:
+#    types: [completed]
+#    app:
+#      name: [Azure Pipelines]
+#    conclusion: [success]
 
 jobs:
   tags:
