@@ -29,6 +29,8 @@ jobs:
     steps:
       # You have to check out your repo first.
       - uses: actions/checkout@v2
+        with:
+          fetch-tags: true
       - name: Test bump version and push tag
         id: tag_version_test
         uses: mathieudutour/github-tag-action@v6.1
@@ -37,7 +39,8 @@ jobs:
           tag_prefix: ${{ inputs.env == 'prod' && 'v' || 'stg' }}
           dry_run: true
       - name: Set previous tag sha
-        run: echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 $PREVIOUS_TAG)" >> $GITHUB_ENV
+        run: |
+          echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 $PREVIOUS_TAG)" >> $GITHUB_ENV
         env:
           PREVIOUS_TAG: ${{ steps.tag_version_test.outputs.previous_tag }}
       - name: log-info
