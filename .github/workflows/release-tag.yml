@@ -37,7 +37,7 @@ jobs:
           tag_prefix: ${{ inputs.env == 'prod' && 'v' || 'stg' }}
           dry_run: true
       - name: Set previous tag sha
-        run: echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 PREVIOUS_TAG)" >> $GITHUB_ENV
+        run: echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 $PREVIOUS_TAG)" >> $GITHUB_ENV
         env:
           PREVIOUS_TAG: $${{ steps.tag_version_test.outputs.previous_tag }}
       - name: log-info
