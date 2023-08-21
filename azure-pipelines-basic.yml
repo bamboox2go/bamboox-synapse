@@ -32,17 +32,15 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-- stage: 'build'
-  displayName: 'Validate project'
-  jobs:
-  - template: stage-pipeline.yml
-    parameters:
-      environment: 'prod'
-      runDeploy: eq('${{ parameters.env }}', 'prod')
-  - template: stage-pipeline.yml
-    parameters:
-      environment: 'stg'
-      runDeploy: eq('${{ parameters.env }}', 'stg')
+
+- template: stage-pipeline.yml
+  parameters:
+    environment: 'prod'
+    runDeploy: eq('${{ parameters.env }}', 'prod')
+- template: stage-pipeline.yml
+  parameters:
+    environment: 'stg'
+    runDeploy: eq('${{ parameters.env }}', 'stg')
 #steps:
 #- checkout: self
 #  fetchTags: true
