@@ -21,18 +21,25 @@ jobs:
     steps:
       # You have to check out your repo first.
       - uses: actions/checkout@v2
-      - name: Bump version and push tag
-        id: tag_version
+      - name: Test bump version and push tag
+        id: tag_version_test
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: ${{ inputs.env == 'prod' && 'v' || 'stg' }}
+          dry_run: true
+#      - name: Bump version and push tag
+#        id: tag_version
+#        uses: mathieudutour/github-tag-action@v6.1
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          tag_prefix: ${{ inputs.env == 'prod' && 'v' || 'stg' }}
 #      github.event
       - name: log-info
         run: |
           echo "build success"
         env:
-          GIT_CONTEXT: ${{ toJSON(github) }}
+          TASK_CONTEXT: $${{ toJSON(steps.tag_version_test.outputs) }}
       #      - name: Wait for build to succeed
       #        uses: fountainhead/action-wait-for-check@v1.1.0
       #        id: wait-for-build
