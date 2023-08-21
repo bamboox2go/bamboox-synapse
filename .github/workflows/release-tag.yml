@@ -11,32 +11,25 @@ on:
         options:
           - prod
           - stg
-      apply:
-        description: 'Apply tag'
-        required: true
-        default: 'false'
-        type: choice
-        options:
-          - true
-          - false
-  #  check_run:
-  #    types: [completed]
+    check_run:
+      types: [completed]
 
 jobs:
   tags:
     runs-on: ubuntu-latest
-#    if: github.sha == github.event.check_run.head_sha && github.event.check_run.conclusion == 'success' && github.event.check_run.name == 'bamboox2go.bamboox-synapse (1)'
+    if: |
+      github.sha == github.event.check_run.head_sha && github.event.check_run.conclusion == 'success' && 
+      (github.event.check_run.name == 'bamboox2go.bamboox-synapse (Deploy project in prod Deploy Synapse Workspace)' or
+      github.event.check_run.name == 'bamboox2go.bamboox-synapse (Deploy project in stg Deploy Synapse Workspace)')
     steps:
       # You have to check out your repo first.
       - uses: actions/checkout@v3
-        with:
-          fetch-tags: true
       - name: Test bump version and push tag
         id: tag_version_test
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: ${{ inputs.env == 'prod' && 'v' || 'stg' }}
+          tag_prefix: ${{ github.event.check_run.name == 'bamboox2go.bamboox-synapse (Deploy project in prod Deploy Synapse Workspace)' && 'v' || 'stg' }}
           dry_run: true
       - name: Set previous tag sha
         run: |
@@ -44,34 +37,10 @@ jobs:
           echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 $PREVIOUS_TAG)" >> $GITHUB_ENV
         env:
           PREVIOUS_TAG: ${{ steps.tag_version_test.outputs.previous_tag }}
-      - name: log-info
-        run: |
-          echo "build success"
-        env:
-          TASK_CONTEXT: ${{ toJSON(steps.tag_version_test.outputs) }}
-          IS_HEAD: ${{ env.GITHUB_PREV_TAG_SHA != github.event.check_run.head_sha }}
-          LATEST_TAG: ${{ env.GITHUB_PREV_TAG_SHA }}
       - name: Bump version and push tag
         id: tag_version
         if: inputs.apply == 'true' &&  env.GITHUB_SHA_SHORT != github.event.check_run.head_sha
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: ${{ inputs.env == 'prod' && 'v' || 'stg' }}
-      #      - name: Wait for build to succeed
-      #        uses: fountainhead/action-wait-for-check@v1.1.0
-      #        id: wait-for-build
-      #        with:
-      #          token: ${{ secrets.GITHUB_TOKEN }}
-      #          checkName: "bamboox2go.bamboox-synapse (1)"
-      #          timeoutSeconds: 30
-      #          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      #      - name: Do something with a passing build
-      #        if: steps.wait-for-build.outputs.conclusion == 'success'
-      #        run: |
-      #          echo "build success"
-      #      - name: Do something with a failing build
-      #        if: steps.wait-for-build.outputs.conclusion == 'failure'
-      #        run: |
-      #          echo "build failed"
-        
+          tag_prefix: ${{ github.event.check_run.name == 'bamboox2go.bamboox-synapse (Deploy project in prod Deploy Synapse Workspace)' && 'v' || 'stg' }}
