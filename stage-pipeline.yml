@@ -10,8 +10,8 @@ stages:
     environment: ${{ parameters.environment }}
   condition: eq(${{ parameters.runDeploy }}, true)
   jobs:
-    - job: basic_${{ parameters.environment }}
-      displayName: basic job ${{ parameters.environment }}
+    - job: deploy_synapse
+      displayName: Deploy Synapse Workspace
       steps:
       - script: |
           echo ${{ parameters.environment }}
