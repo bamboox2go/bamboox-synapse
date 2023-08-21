@@ -11,8 +11,8 @@ on:
         options:
           - prod
           - stg
-    check_run:
-      types: [completed]
+  check_run:
+    types: [completed]
 
 jobs:
   tags:
