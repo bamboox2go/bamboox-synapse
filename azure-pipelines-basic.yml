@@ -40,7 +40,7 @@ steps:
   displayName: Fail build if partially successful
   condition: eq('${{ parameters.error }}', 'true')
 
-- ${{ if and(eq(parameters.fullSynapseDeployment, 'false'), eq(parameters.env, 'DEV')) }}:
+- ${{ if and(eq(parameters.fullSynapseDeployment, 'false'):
     - task: Bash@3
       displayName: 'Remove unchanged notebooks and pipelines'
       inputs:
