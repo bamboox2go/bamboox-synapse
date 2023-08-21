@@ -32,6 +32,8 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+- checkout: self
+  fetchTags: true
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
