@@ -28,7 +28,7 @@ jobs:
 #    if: github.sha == github.event.check_run.head_sha && github.event.check_run.conclusion == 'success' && github.event.check_run.name == 'bamboox2go.bamboox-synapse (1)'
     steps:
       # You have to check out your repo first.
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-tags: true
       - name: Test bump version and push tag
