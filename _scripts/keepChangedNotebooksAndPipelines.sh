@@ -5,6 +5,8 @@ echo $env
 
 git fetch origin --tag
 
+git tag
+
 if [ "$env" == "dev" ]
 then
   refTag="origin/main"
