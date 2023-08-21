@@ -40,6 +40,7 @@ jobs:
           dry_run: true
       - name: Set previous tag sha
         run: |
+          git fetch --tags origin
           echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 $PREVIOUS_TAG)" >> $GITHUB_ENV
         env:
           PREVIOUS_TAG: ${{ steps.tag_version_test.outputs.previous_tag }}
