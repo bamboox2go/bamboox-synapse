@@ -10,6 +10,9 @@ stages:
     environment: ${{ parameters.environment }}
   condition: eq(${{ parameters.runDeploy }}, true)
   jobs:
-  - script: |
-      echo ${{ parameters.environment }}
-    displayName: 'Hello world job'
+    - job: basic_${{ parameters.environment }}
+      displayName: basic job ${{ parameters.environment }}
+      steps:
+      - script: |
+          echo ${{ parameters.environment }}
+        displayName: 'Hello world job'

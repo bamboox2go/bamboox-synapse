@@ -32,7 +32,6 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-
 - template: stage-pipeline.yml
   parameters:
     environment: 'prod'
