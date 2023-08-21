@@ -1,7 +1,9 @@
 #!/bin/bash
-
+set -x
 env=$1
 echo $env
+
+git fetch origin --tag
 
 if [ "$env" == "dev" ]
 then
@@ -13,7 +15,6 @@ else
   refTag=$(git describe --tags --match="v[0-9]*"  --abbrev=0)
 fi
 
-git fetch origin --tag
 
 changed_files=$(git diff --name-only $refTag)
 

@@ -46,3 +46,4 @@ steps:
       inputs:
         targetType: 'filePath'
         filePath: '_scripts/keepChangedNotebooksAndPipelines.sh'
+        arguments: ${{ parameters.env }}
