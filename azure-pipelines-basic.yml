@@ -44,7 +44,14 @@ steps:
     exit 1
   displayName: Fail build if partially successful
   condition: eq('${{ parameters.error }}', 'true')
-
+- template: stage-pipeline.yml
+  parameters:
+    environment: 'prod'
+    runDeploy: eq('${{ parameters.env }}', 'prod')
+- template: stage-pipeline.yml
+  parameters:
+    environment: 'stg'
+    runDeploy: eq('${{ parameters.env }}', 'stg')
 - ${{ if eq(parameters.fullSynapseDeployment, 'false') }}:
     - task: Bash@3
       displayName: 'Remove unchanged notebooks and pipelines'
