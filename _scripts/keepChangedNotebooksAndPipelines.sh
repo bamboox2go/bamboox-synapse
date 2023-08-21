@@ -3,7 +3,6 @@ set -x
 env=$1
 echo $env
 
-git fetch origin --tag
 
 git tag
 
@@ -12,9 +11,9 @@ then
   refTag="origin/main"
 elif [ "$env" == "stg" ]
 then
-  refTag=$(git describe --tags --match="stg[0-9]*"  --abbrev=0)
+  refTag=$(git tag -l   --sort=-creatordate  | grep -e 'stg[0-9].[0-9].[0-9]'|head -n1)
 else
-  refTag=$(git describe --tags --match="v[0-9]*"  --abbrev=0)
+  refTag=$(git tag -l   --sort=-creatordate  | grep -e 'v[0-9].[0-9].[0-9]'|head -n1)
 fi
 
 
