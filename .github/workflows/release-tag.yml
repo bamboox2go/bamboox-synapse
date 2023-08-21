@@ -19,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.sha == github.event.check_run.head_sha && github.event.check_run.conclusion == 'success' 
-      # && (github.event.check_run.name == 'bamboox2go.bamboox-synapse (Deploy project in prod Deploy Synapse Workspace)' ||
-      # github.event.check_run.name == 'bamboox2go.bamboox-synapse (Deploy project in stg Deploy Synapse Workspace)')
     steps:
       # You have to check out your repo first.
       - uses: actions/checkout@v3
