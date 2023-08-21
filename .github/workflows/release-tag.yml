@@ -39,7 +39,7 @@ jobs:
       - name: Set previous tag sha
         run: echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 $PREVIOUS_TAG)" >> $GITHUB_ENV
         env:
-          PREVIOUS_TAG: steps.tag_version_test.outputs.previous_tag
+          PREVIOUS_TAG: $${{ steps.tag_version_test.outputs.previous_tag }}
       - name: log-info
         run: |
           echo "build success"
