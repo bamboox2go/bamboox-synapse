@@ -6,6 +6,21 @@
 trigger: none
 
 parameters:
+  - name: env
+    displayName: Environment
+    type: string
+    default: 'dev'
+    values:
+      - 'dev'
+      - 'stg'
+      - 'prod'
+  - name: fullSynapseDeployment
+    displayName: Force full deployment
+    type: string
+    default: 'false'
+    values:
+      - 'true'
+      - 'false'
   - name: error
     displayName: Fail Pipeline
     type: string
@@ -24,3 +39,10 @@ steps:
     exit 1
   displayName: Fail build if partially successful
   condition: eq('${{ parameters.error }}', 'true')
+
+- ${{ if and(eq(parameters.fullSynapseDeployment, 'false'), eq(parameters.env, 'DEV')) }}:
+    - task: Bash@3
+      displayName: 'Remove unchanged notebooks and pipelines'
+      inputs:
+        targetType: 'filePath'
+        filePath: '_scripts/keepChangedNotebooksAndPipelines.sh'
