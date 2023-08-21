@@ -34,7 +34,10 @@ pool:
 steps:
 - checkout: self
   fetchTags: true
-- script: echo Hello, world!
+- script: |
+    echo Hello, world!
+    git status
+    git tag
   displayName: 'Run a one-line script'
 
 - bash: |
