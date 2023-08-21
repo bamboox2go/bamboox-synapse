@@ -18,7 +18,7 @@ jobs:
   tags:
     runs-on: ubuntu-latest
     if: |
-      github.sha == github.event.check_run.head_sha && github.event.check_run.conclusion == 'success' 
+      github.sha == github.event.check_run.head_sha && github.event.check_run.conclusion == 'success'
     steps:
       # You have to check out your repo first.
       - uses: actions/checkout@v3
@@ -35,6 +35,8 @@ jobs:
           echo "GITHUB_PREV_TAG_SHA=$(git rev-list -n 1 $PREVIOUS_TAG)" >> $GITHUB_ENV
         env:
           PREVIOUS_TAG: ${{ steps.tag_version_test.outputs.previous_tag }}
+          NUMBER: ${{ toJSON(github.event) }}
+          GIT_CONTEXT: ${{ toJSON(github) }}
       - name: Bump version and push tag
         id: tag_version
         if: inputs.apply == 'true' &&  env.GITHUB_SHA_SHORT != github.event.check_run.head_sha
