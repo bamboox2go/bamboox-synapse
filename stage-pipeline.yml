@@ -1,0 +1,15 @@
+parameters:
+  - name: environment
+    default: ''
+  - name: runDeploy
+    default: true
+stages:
+- stage: 'Deploy_${{ parameters.environment }}'
+  displayName: 'Deploy project in ${{ parameters.environment }}'
+  variables:
+    environment: ${{ parameters.environment }}
+  condition: eq(${{ parameters.runDeploy }}, true)
+  jobs:
+  - script: |
+      echo ${{ parameters.environment }}
+    displayName: 'Hello world job'
