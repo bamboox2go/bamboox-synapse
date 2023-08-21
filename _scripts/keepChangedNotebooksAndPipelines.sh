@@ -11,6 +11,7 @@ then
   refTag=$(git describe --tags --match="stg[0-9]*"  --abbrev=0)
 else
   refTag=$(git describe --tags --match="v[0-9]*"  --abbrev=0)
+fi
 
 git fetch origin --tag
 
