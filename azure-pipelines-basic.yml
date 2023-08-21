@@ -31,31 +31,36 @@ parameters:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- checkout: self
-  fetchTags: true
-- script: |
-    echo Hello, world!
-    git status
-    git tag
-  displayName: 'Run a one-line script'
+stages:
+- stage: 'build'
+  displayName: 'Validate project'
+  jobs:
+  - template: stage-pipeline.yml
+    parameters:
+      environment: 'prod'
+      runDeploy: eq('${{ parameters.env }}', 'prod')
+  - template: stage-pipeline.yml
+    parameters:
+      environment: 'stg'
+      runDeploy: eq('${{ parameters.env }}', 'stg')
+#steps:
+#- checkout: self
+#  fetchTags: true
+#- script: |
+#    echo Hello, world!
+#    git status
+#    git tag
+#  displayName: 'Run a one-line script'
+#
+#- bash: |
+#    exit 1
+#  displayName: Fail build if partially successful
+#  condition: eq('${{ parameters.error }}', 'true')
 
-- bash: |
-    exit 1
-  displayName: Fail build if partially successful
-  condition: eq('${{ parameters.error }}', 'true')
-- template: stage-pipeline.yml
-  parameters:
-    environment: 'prod'
-    runDeploy: eq('${{ parameters.env }}', 'prod')
-- template: stage-pipeline.yml
-  parameters:
-    environment: 'stg'
-    runDeploy: eq('${{ parameters.env }}', 'stg')
-- ${{ if eq(parameters.fullSynapseDeployment, 'false') }}:
-    - task: Bash@3
-      displayName: 'Remove unchanged notebooks and pipelines'
-      inputs:
-        targetType: 'filePath'
-        filePath: '_scripts/keepChangedNotebooksAndPipelines.sh'
-        arguments: ${{ parameters.env }}
+#- ${{ if eq(parameters.fullSynapseDeployment, 'false') }}:
+#    - task: Bash@3
+#      displayName: 'Remove unchanged notebooks and pipelines'
+#      inputs:
+#        targetType: 'filePath'
+#        filePath: '_scripts/keepChangedNotebooksAndPipelines.sh'
+#        arguments: ${{ parameters.env }}
