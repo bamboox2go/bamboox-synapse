@@ -49,8 +49,8 @@ jobs:
           echo "build success"
         env:
           TASK_CONTEXT: ${{ toJSON(steps.tag_version_test.outputs) }}
-          IS_HEAD: ${{ env.GITHUB_SHA_SHORT != github.event.check_run.head_sha }}
-          LATEST_TAG: ${{ env.GITHUB_SHA_SHORT }}
+          IS_HEAD: ${{ env.GITHUB_PREV_TAG_SHA != github.event.check_run.head_sha }}
+          LATEST_TAG: ${{ env.GITHUB_PREV_TAG_SHA }}
       - name: Bump version and push tag
         id: tag_version
         if: inputs.apply == 'true' &&  env.GITHUB_SHA_SHORT != github.event.check_run.head_sha
