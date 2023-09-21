@@ -13,7 +13,10 @@ stages:
     - deployment: deploy_synapse
       displayName: Deploy Synapse Workspace
       environment: '${{ parameters.environment }}'
-      steps:
-      - script: |
-          echo ${{ parameters.environment }}
-        displayName: 'Hello world job'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - script: |
+                echo ${{ parameters.environment }}
+              displayName: 'Hello world job'
