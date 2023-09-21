@@ -10,9 +10,13 @@ stages:
     environment: ${{ parameters.environment }}
   condition: eq(${{ parameters.runDeploy }}, true)
   jobs:
-    - job: deploy_synapse
+    - deployment: deploy_synapse
       displayName: Deploy Synapse Workspace
-      steps:
-      - script: |
-          echo ${{ parameters.environment }}
-        displayName: 'Hello world job'
+      environment: '${{ parameters.environment }}'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - script: |
+                echo ${{ parameters.environment }}
+              displayName: 'Hello world job'
