@@ -15,6 +15,15 @@ on:
     types: [completed]
 
 jobs:
+  trace:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print log
+        run: |
+          echo "Any log works"
+        env:
+          EVENT: ${{ toJSON(github.event) }}
+          GIT_CONTEXT: ${{ toJSON(github) }}
   tags:
     runs-on: ubuntu-latest
     if: |
