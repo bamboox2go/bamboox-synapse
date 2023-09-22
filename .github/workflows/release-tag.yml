@@ -1,4 +1,4 @@
-name: move tags
+name: move tags ${{ github.event.check_run.name }}
 
 on:
   workflow_dispatch:
