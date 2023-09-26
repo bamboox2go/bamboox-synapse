@@ -3,6 +3,8 @@ parameters:
     default: ''
   - name: runDeploy
     default: true
+  - name: error
+    default: false
 stages:
 - stage: 'Deploy_${{ parameters.environment }}'
   displayName: 'Deploy project in ${{ parameters.environment }}'
@@ -20,3 +22,7 @@ stages:
             - script: |
                 echo ${{ parameters.environment }}
               displayName: 'Hello world job'
+            - bash: |
+                exit 1
+              displayName: Fail build if partially successful
+              condition: eq('${{ parameters.error }}', 'true')

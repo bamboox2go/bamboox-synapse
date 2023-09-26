@@ -36,6 +36,7 @@ stages:
   parameters:
     environment: 'prod'
     runDeploy: eq('${{ parameters.env }}', 'prod')
+    error: ${{ parameters.error }}
 - template: stage-pipeline.yml
   parameters:
     environment: 'stg'
