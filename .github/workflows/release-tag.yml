@@ -51,7 +51,7 @@ jobs:
           GIT_CONTEXT: ${{ toJSON(github) }}
       - name: Bump version and push tag
         id: tag_version
-        if: inputs.apply == 'true' &&  env.GITHUB_SHA_SHORT != github.event.check_run.head_sha
+        if: env.GITHUB_SHA_SHORT != github.event.check_run.head_sha
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
