@@ -22,6 +22,8 @@ jobs:
         name: Checkout repository
       - name: Cleaning tags ${{ github.event.check_run.name }}
         run: |
+          set -xo
+
           function delete_tags() {
             tag_prefix=$1
 
