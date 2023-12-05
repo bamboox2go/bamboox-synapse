@@ -54,6 +54,7 @@ jobs:
           }
 
           pwd
+          git fetch --prune --prune-tags
           delete_tags 'stg1'
           delete_tags 'v1'
 
