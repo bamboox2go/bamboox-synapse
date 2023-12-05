@@ -24,6 +24,7 @@ jobs:
             tag_prefix=$1
 
             echo "Process tags deletion with prefix $1"
+            pwd
             threadshold=20
             tag_numbers=$(git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags |grep $tag_prefix | wc -l)
             echo $tag_numbers
@@ -46,6 +47,7 @@ jobs:
             fi
           }
 
+          pwd
           delete_tags 'stg1'
           delete_tags 'v1'
 
