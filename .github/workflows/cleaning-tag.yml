@@ -43,9 +43,9 @@ jobs:
                 git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $tags_to_delete
 
                 echo "Tags to keep"
-                git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $threadshold
+                git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $tags_to_delete
                 #Remove origin tags
-                git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $threadshold |xargs git push origin --delete
+                git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $tags_to_delete |xargs git push origin --delete
 
               #Remove local tags
               # git fetch --prune --prune-tags
