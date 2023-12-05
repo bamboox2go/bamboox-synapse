@@ -20,6 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout repository
+        with:
+          fetch-tags: true
       - name: Cleaning tags ${{ github.event.check_run.name }}
         run: |
           set -xo
