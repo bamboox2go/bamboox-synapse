@@ -38,7 +38,7 @@ jobs:
             if [ $tag_numbers -gt $threadshold ] 
             then
                 echo "the number of tags [$tag_numbers] is greater than  $threadshold"
-                tags_to_delete=$(expr $tag_numbers-$threadshold)
+                tags_to_delete=$(expr $tag_numbers - $threadshold)
                 echo "Tags to delete $tags_to_delete"
                 git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $tags_to_delete
 
