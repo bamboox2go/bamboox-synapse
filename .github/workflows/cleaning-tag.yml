@@ -18,6 +18,8 @@ jobs:
   cleaning:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        name: Checkout repository
       - name: Cleaning tags ${{ github.event.check_run.name }}
         run: |
           function delete_tags() {
