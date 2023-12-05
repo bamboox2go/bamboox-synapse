@@ -20,25 +20,34 @@ jobs:
     steps:
       - name: Cleaning tags ${{ github.event.check_run.name }}
         run: |
-          set -xo
-          echo "Cleaning STG tags"
-          tag_prefix='stg1'
+          function delete_tags() {
+            tag_prefix=$1
 
-          tag_numbers=$(git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags |grep $tag_prefix | wc -l)
-          echo "Number of tags [$tag_numbers] with prefix [$tag_prefix]"
-          threadshold=50
+            echo "Process tags deletion with prefix $1"
+            threadshold=20
+            tag_numbers=$(git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags |grep $tag_prefix | wc -l)
+            echo $tag_numbers
 
-          if [$tag_numbers -gt $threadshold ] 
-          then
-              echo "the number of tags [$tag_numbers] is greater than  $threadshold"
-              tags_to_delete=$(($tag_numbers-$threadshold))
-              echo "Tags to delete $tags_to_delete"
-              git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $tags_to_delete
+            if [$tag_numbers -gt $threadshold ] 
+            then
+                echo "the number of tags [$tag_numbers] is greater than  $threadshold"
+                tags_to_delete=$(($tag_numbers-20))
+                echo "Tags to delete $tags_to_delete"
+                git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $tags_to_delete
 
-              echo "Tags to keep"
-              git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $threadshold
+                echo "Tags to keep"
+                git for-each-ref --sort=creatordate --format '%(refname:short)' refs/tags|grep $tag_prefix |tail -n $threadshold
+                #Remove origin tags
               # git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags|grep stg |tail -n 2 |xargs git push origin --delete
 
-          fi
+              #Remove local tags
+              # git fetch --prune --prune-tags
+
+            fi
+          }
+
+          delete_tags 'stg1'
+          delete_tags 'v1'
+
 
   
